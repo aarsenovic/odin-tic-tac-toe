@@ -1,6 +1,19 @@
 function Gameboard() {
     const gameboardArray = [];
+    let  testBoard = [1,1,1,1,1,1,1,1,1];
 
+    function renderGameBoard(gameboard) {
+        const mainDiv = document.querySelector(".main");
+
+        gameboard.forEach(element => {
+            const field  = document.createElement("div");
+            field.textContent = element;
+
+            mainDiv.appendChild(field);
+        });
+    }
+
+    renderGameBoard(testBoard);
 }
 
 function Player(name, sign) {
@@ -64,4 +77,4 @@ function Game() {
 }
 
 Game();
-
+Gameboard();
