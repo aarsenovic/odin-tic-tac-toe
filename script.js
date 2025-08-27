@@ -1,15 +1,19 @@
 function Gameboard() {
     const gameboardArray = [];
-    let  testBoard = [1,1,1,1,1,1,1,1,1];
+    let  testBoard = ["0", "1", "2", "3", "4", "5", "6", "7", "8"];
 
     function renderGameBoard(gameboard) {
         const mainDiv = document.querySelector(".main");
+        const gameBoardDiv = document.createElement("div");
+        gameBoardDiv.classList.add("gameboard")
+        mainDiv.appendChild(gameBoardDiv)
+        
 
         gameboard.forEach(element => {
             const field  = document.createElement("div");
             field.textContent = element;
 
-            mainDiv.appendChild(field);
+            gameBoardDiv.appendChild(field);
         });
     }
 

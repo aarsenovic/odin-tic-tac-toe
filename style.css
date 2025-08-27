@@ -1,0 +1,19 @@
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameboard {
+    border: 1px solid red;
+    background-color: cyan;
+    display: grid;
+    grid-template-columns: 50px 50px 50px;
+    gap: 10px;
+}
+
+.gameboard>div {
+    background-color: gray;
+    padding: 10px;
+    text-align: center;
+}
