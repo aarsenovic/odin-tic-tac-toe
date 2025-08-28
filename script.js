@@ -15,6 +15,7 @@ function Gameboard() {
             field.textContent = element;
             field.setAttribute("data-index-number", i)
             i++;
+            //  Also need logic that  checks  if element  already exists there and if  it  does user can't add new one
             field.addEventListener("click",()=>{
                 gameboard[field.dataset.indexNumber] = "X";
                 field.textContent = gameboard[field.dataset.indexNumber];
