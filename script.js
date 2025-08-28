@@ -1,6 +1,7 @@
 function Gameboard() {
     const gameboardArray = [];
-    let  testBoard = ["0", "1", "2", "3", "4", "5", "6", "7", "8"];
+    let  testBoard = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+    console.log("ARRAY COUNT", testBoard.length)
 
     function renderGameBoard(gameboard) {
         const mainDiv = document.querySelector(".main");
@@ -8,10 +9,16 @@ function Gameboard() {
         gameBoardDiv.classList.add("gameboard")
         mainDiv.appendChild(gameBoardDiv)
         
-
+        let i = 0 
         gameboard.forEach(element => {
             const field  = document.createElement("div");
             field.textContent = element;
+            field.setAttribute("data-index-number", i)
+            i++;
+            field.addEventListener("click",()=>{
+                gameboard[field.dataset.indexNumber] = "X";
+                field.textContent = gameboard[field.dataset.indexNumber];
+            })
 
             gameBoardDiv.appendChild(field);
         });
