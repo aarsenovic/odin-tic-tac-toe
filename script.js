@@ -17,8 +17,13 @@ function Gameboard() {
             i++;
             //  Also need logic that  checks  if element  already exists there and if  it  does user can't add new one
             field.addEventListener("click",()=>{
-                gameboard[field.dataset.indexNumber] = "X";
-                field.textContent = gameboard[field.dataset.indexNumber];
+                if(gameboard[field.dataset.indexNumber] === " ") {
+                    gameboard[field.dataset.indexNumber] = "X";
+                    field.textContent = gameboard[field.dataset.indexNumber];
+                }
+                else {
+                    alert ("That field is already taken")
+                }
             })
 
             gameBoardDiv.appendChild(field);
@@ -29,7 +34,11 @@ function Gameboard() {
 }
 
 function Player(name, sign) {
+    let score = 0;
+    const getScore =()=> score;
+    const increaseScore =()=> score++;
 
+    return {name,sign,increaseScore,getScore}
 }
 
 
