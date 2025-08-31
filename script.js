@@ -2,6 +2,7 @@ function Gameboard() {
     const gameboardArray = [];
     let  testBoard = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
     console.log("ARRAY COUNT", testBoard.length)
+    
 
     function renderGameBoard(gameboard) {
         const mainDiv = document.querySelector(".main");
@@ -45,6 +46,11 @@ function Player(name, sign) {
 
 function Game() {
 
+    const playerOneName = prompt("Input player one name:")
+    const playerTwoName = prompt("Input player two name:")
+
+    const playerOne = Player(playerOneName, "X");
+    const playerTwo = Player(playerTwoName, "O"); 
 
     function checkIsGameOver(gameboard, sign) {
 
@@ -76,24 +82,27 @@ function Game() {
             console.log("Game is a tie!")
         }
     }
-    const example1 = ["X", "X", "X", "", "", "", "", "", ""];
-    const example2 = ["X", "", "", "X", "", "", "X", "", ""];
-    const example3 = ["X", "", "", "", "X", "", "", "", "X"];
-    const example4 = ["", "", "X", "", "X", "", "X", "", ""];
-    const example5 = ["", "", "", "X", "X", "X", "", "", ""];
-    const example6 = ["", "", "", "", "", "", "X", "X", "X"];
-    const example7 = ["X", "O", "X", "O", "X", "O", "O", "X", "O"];
+    // const example1 = ["X", "X", "X", "", "", "", "", "", ""];
+    // const example2 = ["X", "", "", "X", "", "", "X", "", ""];
+    // const example3 = ["X", "", "", "", "X", "", "", "", "X"];
+    // const example4 = ["", "", "X", "", "X", "", "X", "", ""];
+    // const example5 = ["", "", "", "X", "X", "X", "", "", ""];
+    // const example6 = ["", "", "", "", "", "", "X", "X", "X"];
+    // const example7 = ["X", "O", "X", "O", "X", "O", "O", "X", "O"];
 
 
-    checkIsGameOver(example1, "X");
-    checkIsGameOver(example2, "X");
-    checkIsGameOver(example3, "X");
-    checkIsGameOver(example4, "X");
-    checkIsGameOver(example5, "X");
-    checkIsGameOver(example6, "X");
-    console.log("Treba da bude TIE!")
-    checkIsGameOver(example7, "X");
+    // checkIsGameOver(example1, "X");
+    // checkIsGameOver(example2, "X");
+    // checkIsGameOver(example3, "X");
+    // checkIsGameOver(example4, "X");
+    // checkIsGameOver(example5, "X");
+    // checkIsGameOver(example6, "X");
+    // console.log("Treba da bude TIE!")
+    // checkIsGameOver(example7, "X");
+    function playGame(playerOne,playerTwo, gameboard) {
+        let turns = 0;
 
+    }
     return { checkIsGameOver }
 }
 
