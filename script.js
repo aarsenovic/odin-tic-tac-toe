@@ -57,7 +57,7 @@ function Game() {
     const playerTwo = Player("Miri", "O");
 
     function checkIsGameOver(gameboard, sign) {
-
+        console.log("trenutno stanje table",gameboard);
         const possibleWinningOutcomes = [
             [0, 1, 2],
             [0, 3, 6],
@@ -91,21 +91,27 @@ function Game() {
     }
     let turn = 1;
     function collectUserInput(fieldIndex, field) {
-
         makeMove(fieldIndex, field);
     }
 
     function makeMove(fieldIndex, field) {
-        if (turn % 2 === 0) {
+        let isFieldTaken = false;
+       if(testBoard[fieldIndex] !== " ") {
+            isFieldTaken = true;
+        
+       }
+        if (turn % 2 === 0 && isFieldTaken ===  false) {
             testBoard[fieldIndex] = playerTwo.sign;
             field.textContent = testBoard[fieldIndex];
             checkIsGameOver(testBoard, playerTwo.sign)
-        } else {
+            turn++;
+        } else if (turn % 2 !== 0 && isFieldTaken ===  false){
             testBoard[fieldIndex] = playerOne.sign;
             field.textContent = testBoard[fieldIndex];
             checkIsGameOver(testBoard, playerOne.sign)
+            turn++;
         }
-        turn++;
+        
     }
 
 
