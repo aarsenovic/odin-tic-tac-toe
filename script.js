@@ -1,56 +1,60 @@
-function Gameboard() {
-    const gameboardArray = [];
-    let  testBoard = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
-    console.log("ARRAY COUNT", testBoard.length)
+function Gameboard(helperFunction) {
     
-
     function renderGameBoard(gameboard) {
+        console.log("Renderovala se tabla");
         const mainDiv = document.querySelector(".main");
         const gameBoardDiv = document.createElement("div");
         gameBoardDiv.classList.add("gameboard")
         mainDiv.appendChild(gameBoardDiv)
-        
-        let i = 0 
+
+        let i = 0
         gameboard.forEach(element => {
-            const field  = document.createElement("div");
+            const field = document.createElement("div");
             field.textContent = element;
             field.setAttribute("data-index-number", i)
             i++;
             //  Also need logic that  checks  if element  already exists there and if  it  does user can't add new one
-            field.addEventListener("click",()=>{
-                if(gameboard[field.dataset.indexNumber] === " ") {
-                    gameboard[field.dataset.indexNumber] = "X";
-                    field.textContent = gameboard[field.dataset.indexNumber];
-                }
-                else {
-                    alert ("That field is already taken")
-                }
+            field.addEventListener("click", () => {
+                //probaj da iskoristis ovo u helper funkciji
+                // if(gameboard[field.dataset.indexNumber] === " ") {
+                //     gameboard[field.dataset.indexNumber] = "X";
+                //     field.textContent = gameboard[field.dataset.indexNumber];
+                // }
+                // else {
+                //     alert ("That field is already taken")
+                // }
+                // console.log(field.dataset.indexNumber);
+                helperFunction(field.dataset.indexNumber, field);
             })
 
             gameBoardDiv.appendChild(field);
         });
     }
 
-    renderGameBoard(testBoard);
+    function deleteCurrentGameBoard(gameBoardDiv) {
+        gameBoardDiv.remove();
+    }
+
+    return { renderGameBoard }
 }
 
 function Player(name, sign) {
     let score = 0;
-    const getScore =()=> score;
-    const increaseScore =()=> score++;
+    const getScore = () => score;
+    const increaseScore = () => score++;
 
-    return {name,sign,increaseScore,getScore}
+    return { name, sign, increaseScore, getScore }
 }
 
 
 
 function Game() {
 
-    const playerOneName = prompt("Input player one name:")
-    const playerTwoName = prompt("Input player two name:")
+    // const playerOneName = prompt("Input player one name:")
+    // const playerTwoName = prompt("Input player two name:")
 
-    const playerOne = Player(playerOneName, "X");
-    const playerTwo = Player(playerTwoName, "O"); 
+    const playerOne = Player("Zack", "X");
+    const playerTwo = Player("Miri", "O");
 
     function checkIsGameOver(gameboard, sign) {
 
@@ -61,12 +65,10 @@ function Game() {
             [2, 4, 6],
             [3, 4, 5],
             [6, 7, 8],
+            [1, 4, 7],
+            [2, 5, 8],
         ]
 
-
-        // if (gameboard[possibleWinningOutcomes[0][0]] === sign && gameboard[possibleWinningOutcomes[0][1]] === sign && gameboard[possibleWinningOutcomes[0][2]] === sign) {
-
-        // }
 
         let i = 0;
         let isgameWon = false;
@@ -78,33 +80,44 @@ function Game() {
             }
             i++;
         }
-        if (i === 6 && isgameWon === false) {
+        if (i === 8 && isgameWon === false) {
             console.log("Game is a tie!")
         }
     }
-    // const example1 = ["X", "X", "X", "", "", "", "", "", ""];
-    // const example2 = ["X", "", "", "X", "", "", "X", "", ""];
-    // const example3 = ["X", "", "", "", "X", "", "", "", "X"];
-    // const example4 = ["", "", "X", "", "X", "", "X", "", ""];
-    // const example5 = ["", "", "", "X", "X", "X", "", "", ""];
-    // const example6 = ["", "", "", "", "", "", "X", "X", "X"];
-    // const example7 = ["X", "O", "X", "O", "X", "O", "O", "X", "O"];
 
-
-    // checkIsGameOver(example1, "X");
-    // checkIsGameOver(example2, "X");
-    // checkIsGameOver(example3, "X");
-    // checkIsGameOver(example4, "X");
-    // checkIsGameOver(example5, "X");
-    // checkIsGameOver(example6, "X");
-    // console.log("Treba da bude TIE!")
-    // checkIsGameOver(example7, "X");
-    function playGame(playerOne,playerTwo, gameboard) {
+    function playGame(playerOne, playerTwo, gameboard) {
         let turns = 0;
 
     }
+    let turn = 1;
+    function collectUserInput(fieldIndex, field) {
+
+        makeMove(fieldIndex, field);
+    }
+
+    function makeMove(fieldIndex, field) {
+        if (turn % 2 === 0) {
+            testBoard[fieldIndex] = playerTwo.sign;
+            field.textContent = testBoard[fieldIndex];
+            checkIsGameOver(testBoard, playerTwo.sign)
+        } else {
+            testBoard[fieldIndex] = playerOne.sign;
+            field.textContent = testBoard[fieldIndex];
+            checkIsGameOver(testBoard, playerOne.sign)
+        }
+        turn++;
+    }
+
+
+
+    let testBoard = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+    const gameBoardObject = Gameboard(collectUserInput);
+    gameBoardObject.renderGameBoard(testBoard);
+
+
+
     return { checkIsGameOver }
 }
 
 Game();
-Gameboard();
+
