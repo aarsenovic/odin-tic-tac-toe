@@ -2,7 +2,7 @@
 function gameboard() {
     const fieldNodeArray = [];
     function renderGameBoard(gameboard) {
-        
+
         const mainDiv = document.querySelector(".main");
         const gameBoardDiv = document.createElement("div");
         gameBoardDiv.classList.add("gameboard")
@@ -21,11 +21,11 @@ function gameboard() {
 
     }
 
-    function returnNodeList () {
+    function returnNodeList() {
         return fieldNodeArray
     }
 
-    function updateField (field, sign) {
+    function updateField(field, sign) {
         field.textContent = sign;
     }
 
@@ -35,29 +35,53 @@ function gameboard() {
     }
 
 
-    return {renderGameBoard, returnNodeList, updateField}
+    return { renderGameBoard, returnNodeList, updateField, remakeGameBoard }
 }
 
 //model
 function game() {
     let gameState = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+    const playerOne = player("Zack", "X");
+    const playerTwo = player("Miri", "O");
+    
+    let nextTurn = playerOne.sign;
 
+    function changeTurn() {
+        console.log("Funkcija se pokrenula")
+        console.log(nextTurn)
+        if(nextTurn === playerOne.sign) {
+            nextTurn = playerTwo.sign;
+        } else {
+             nextTurn = playerOne.sign;
+        }
+    }
 
-    function updateGameState(index, sign) {
-        if(gameState[index] === " ") {
-            gameState[index] === sign
+    function getNextTurn() {
+        console.log("unutar getNextTurn",nextTurn)
+        return nextTurn
+    }
+
+    function makeAMove(index, sign) {
+        if (gameState[index] === " ") {
+            gameState[index] = sign
+            console.log("Stanje niza", gameState)
             return true
         } else {
+            alert("Incorrect Move")
             return false
         }
     }
 
-    return {gameState}
+    return {gameState, makeAMove, changeTurn, nextTurn, getNextTurn}
 }
 
 
-function player() {
+function player(name, sign) {
+    let score = 0;
+    const getScore = () => score;
+    const increaseScore = () => score++;
 
+    return { name, sign, increaseScore, getScore }
 }
 
 
@@ -70,8 +94,13 @@ function gameController() {
 
     const nodeListArray = view.returnNodeList();
     nodeListArray.forEach(element => {
-        element.addEventListener ("click", ()=>{
-            console.log(element.dataset.indexNumber)
+        element.addEventListener("click", () => {
+            if (model.makeAMove(element.dataset.indexNumber, model.getNextTurn())) {
+                view.updateField(element, model.getNextTurn())
+
+                model.changeTurn();
+            }
+            // console.log(element.dataset.indexNumber)
         })
     })
 }
