@@ -24,7 +24,7 @@ function Gameboard(helperFunction) {
                 //     alert ("That field is already taken")
                 // }
                 // console.log(field.dataset.indexNumber);
-                helperFunction(field.dataset.indexNumber, field);
+                helperFunction(field.dataset.indexNumber, field, gameboard);
             })
 
             gameBoardDiv.appendChild(field);
@@ -35,7 +35,7 @@ function Gameboard(helperFunction) {
         gameBoardDiv.remove();
     }
 
-    return { renderGameBoard }
+    return { renderGameBoard, deleteCurrentGameBoard }
 }
 
 function Player(name, sign) {
@@ -50,11 +50,22 @@ function Player(name, sign) {
 
 function Game() {
 
+
+    let testBoard = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+    const gameBoardObject = Gameboard(collectUserInput);
+    gameBoardObject.renderGameBoard(testBoard);
     // const playerOneName = prompt("Input player one name:")
     // const playerTwoName = prompt("Input player two name:")
-
+    const board = document.querySelector(".gameboard");
     const playerOne = Player("Zack", "X");
     const playerTwo = Player("Miri", "O");
+
+    function restartGame(currentBoard, currentBoardState) {
+        gameBoardObject.deleteCurrentGameBoard(currentBoard);
+        // currentBoardState = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+        let newBoardState = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+        gameBoardObject.renderGameBoard(newBoardState);
+    }
 
     function checkIsGameOver(gameboard, sign) {
         console.log("trenutno stanje table",gameboard);
@@ -77,6 +88,15 @@ function Game() {
                 console.log(`${sign} is a winner`);
                 console.log(`Game is won under condition ${i}`)
                 isgameWon = true;
+                restartGame(board,gameboard);
+                // gameBoardObject.deleteCurrentGameBoard(board);
+                // console.log("STANJE TABLE  NAKON FINISHA",gameboard)
+                // let newBoard = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+                // gameBoardObject.renderGameBoard(newBoard);
+                // console.log("Nova tabla", newBoard)
+                // isgameWon = false;
+                // i = 0;
+
             }
             i++;
         }
@@ -90,35 +110,31 @@ function Game() {
 
     }
     let turn = 1;
-    function collectUserInput(fieldIndex, field) {
-        makeMove(fieldIndex, field);
+    function collectUserInput(fieldIndex, field, gameboard) {
+        makeMove(fieldIndex, field, gameboard);
     }
 
-    function makeMove(fieldIndex, field) {
+    function makeMove(fieldIndex, field, gameboard) {
         let isFieldTaken = false;
-       if(testBoard[fieldIndex] !== " ") {
+       if(gameboard[fieldIndex] !== " ") {
             isFieldTaken = true;
         
        }
         if (turn % 2 === 0 && isFieldTaken ===  false) {
-            testBoard[fieldIndex] = playerTwo.sign;
-            field.textContent = testBoard[fieldIndex];
-            checkIsGameOver(testBoard, playerTwo.sign)
+            gameboard[fieldIndex] = playerTwo.sign;
+            field.textContent = gameboard[fieldIndex];
+            checkIsGameOver(gameboard, playerTwo.sign)
             turn++;
         } else if (turn % 2 !== 0 && isFieldTaken ===  false){
-            testBoard[fieldIndex] = playerOne.sign;
-            field.textContent = testBoard[fieldIndex];
-            checkIsGameOver(testBoard, playerOne.sign)
+            gameboard[fieldIndex] = playerOne.sign;
+            field.textContent = gameboard[fieldIndex];
+            checkIsGameOver(gameboard, playerOne.sign)
             turn++;
         }
         
     }
 
 
-
-    let testBoard = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
-    const gameBoardObject = Gameboard(collectUserInput);
-    gameBoardObject.renderGameBoard(testBoard);
 
 
 
