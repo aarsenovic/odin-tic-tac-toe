@@ -39,27 +39,33 @@ function gameboard() {
 }
 
 //model
-function game() {
+function game(playerOne, playerTwo) {
     let gameState = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
-    const playerOne = player("Zack", "X");
-    const playerTwo = player("Miri", "O");
-    
+
+
     let nextTurn = playerOne.sign;
+    let nextPlayer = playerOne;
     let turn = 1;
+
+    function getGameState() {
+        return gameState
+    }
 
     function changeTurn() {
         // console.log("Funkcija se pokrenula")
         // console.log(nextTurn)
-        if(nextTurn === playerOne.sign) {
+        if (nextTurn === playerOne.sign) {
             nextTurn = playerTwo.sign;
+            nextPlayer = playerTwo;
         } else {
-             nextTurn = playerOne.sign;
+            nextTurn = playerOne.sign;
+            nextPlayer = playerOne;
         }
         console.log("broj poteza", turn);
         turn++;
     }
 
-    function getTurnNumber () {
+    function getTurnNumber() {
         return turn
     }
 
@@ -98,16 +104,26 @@ function game() {
                 console.log(`${sign} is a winner`);
                 console.log(`Game is won under condition ${i}`)
                 isgameWon = true;
+                return nextPlayer
+
             }
             i++;
         }
 
-        if(turn === 9 && isgameWon === false) {
+        if (turn === 9 && isgameWon === false) {
             alert("GAME IS TIE!!!");
+            return "TIE"
         }
     }
 
-    return {gameState, makeAMove, changeTurn, nextTurn, getNextTurn, checkIsGameOver, getTurnNumber}
+    function resetGameState() {
+        turn = 1;
+        gameState = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+        nextTurn = playerOne.sign;
+        nextPlayer = playerOne;
+    }
+
+    return { gameState, makeAMove, changeTurn, nextTurn, getNextTurn, checkIsGameOver, getTurnNumber, resetGameState, getGameState }
 }
 
 
@@ -122,22 +138,47 @@ function player(name, sign) {
 
 //controller
 function gameController() {
+
+    const playerOne = player("Zack", "X");
+    const playerTwo = player("Miri", "O");
+
     const view = gameboard();
-    const model = game();
+    const model = game(playerOne, playerTwo);
 
     view.renderGameBoard(model.gameState);
 
-    const nodeListArray = view.returnNodeList();
-    nodeListArray.forEach(element => {
-        element.addEventListener("click", () => {
-            if (model.makeAMove(element.dataset.indexNumber, model.getNextTurn())) {
-                view.updateField(element, model.getNextTurn())
-                model.checkIsGameOver(model.gameState, model.getNextTurn(), model.getTurnNumber());
-                model.changeTurn();
-            }
-            // console.log(element.dataset.indexNumber)
+    function attachListeners() {
+        const nodeListArray = view.returnNodeList();
+        nodeListArray.forEach(element => {
+            element.addEventListener("click", () => {
+                if (model.makeAMove(element.dataset.indexNumber, model.getNextTurn())) {
+                    view.updateField(element, model.getNextTurn())
+                    let game = model.checkIsGameOver(model.getGameState(), model.getNextTurn(), model.getTurnNumber());
+                    if (typeof game === "object") {
+                        game.increaseScore();
+                        model.resetGameState();
+                        view.remakeGameBoard();
+                        view.renderGameBoard(model.getGameState());
+                        attachListeners();
+                        console.log("Prvi igrac: ", playerOne.getScore());
+                        console.log("Drugi igrac: ", playerTwo.getScore());
+                        console.log("Potez", model.getNextTurn());
+                        console.log("State table", model.getGameState());
+                    }
+                    if (!game) {
+                        model.changeTurn();
+                    }
+                    if (game === "TIE") {
+                        model.resetGameState();
+                        view.remakeGameBoard();
+                        view.renderGameBoard(model.getGameState());
+                        attachListeners();
+                    }
+                }
+            })
         })
-    })
+    }
+    attachListeners();
 }
 
 
