@@ -1,3 +1,4 @@
+(function() {
 // view
 function gameboard() {
     const fieldNodeArray = [];
@@ -104,7 +105,7 @@ function game(playerOne, playerTwo) {
                 console.log(`${sign} is a winner`);
                 console.log(`Game is won under condition ${i}`)
                 isgameWon = true;
-                return nextPlayer
+                return {status: "WIN", winner: nextPlayer}
 
             }
             i++;
@@ -112,7 +113,11 @@ function game(playerOne, playerTwo) {
 
         if (turn === 9 && isgameWon === false) {
             alert("GAME IS TIE!!!");
-            return "TIE"
+            return {status: "TIE"}
+        }
+
+        else {
+            return {status: "ONGOING"}
         }
     }
 
@@ -147,6 +152,12 @@ function gameController() {
 
     view.renderGameBoard(model.gameState);
 
+    function resetRound() {
+            model.resetGameState();
+            view.remakeGameBoard();
+            view.renderGameBoard(model.getGameState());
+    }
+
     function attachListeners() {
         const nodeListArray = view.returnNodeList();
         nodeListArray.forEach(element => {
@@ -154,25 +165,20 @@ function gameController() {
                 if (model.makeAMove(element.dataset.indexNumber, model.getNextTurn())) {
                     view.updateField(element, model.getNextTurn())
                     let game = model.checkIsGameOver(model.getGameState(), model.getNextTurn(), model.getTurnNumber());
-                    if (typeof game === "object") {
-                        game.increaseScore();
-                        model.resetGameState();
-                        view.remakeGameBoard();
-                        view.renderGameBoard(model.getGameState());
-                        attachListeners();
-                        console.log("Prvi igrac: ", playerOne.getScore());
-                        console.log("Drugi igrac: ", playerTwo.getScore());
-                        console.log("Potez", model.getNextTurn());
-                        console.log("State table", model.getGameState());
-                    }
-                    if (!game) {
-                        model.changeTurn();
-                    }
-                    if (game === "TIE") {
-                        model.resetGameState();
-                        view.remakeGameBoard();
-                        view.renderGameBoard(model.getGameState());
-                        attachListeners();
+
+                    switch(game.status) {
+                        case "WIN":
+                            game.winner.increaseScore();
+                            resetRound();
+                            attachListeners();
+                            break
+                        case "ONGOING":
+                            model.changeTurn();
+                            break
+                        case "TIE":
+                            resetRound();
+                            attachListeners();
+                            break
                     }
                 }
             })
@@ -183,3 +189,4 @@ function gameController() {
 
 
 gameController();
+})();
