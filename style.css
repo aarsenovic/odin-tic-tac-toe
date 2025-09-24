@@ -12,24 +12,31 @@ body {
 }
 
 .gameboard {
-    border: 1px solid red;
-    background-color: cyan;
+    border: 1px solid #39FF14;
+    background-color: #39FF14;
     display: grid;
-    grid-template-columns: 50px 50px 50px;
+    grid-template-columns: 200px 200px 200px;
     gap: 10px;
 }
 
 .gameboard>div {
-    background-color: gray;
+    background-color: #0D0D0D;
     padding: 10px;
     text-align: center;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    color: #FF007F;
 }
 
 .player-scores {
-    background-color: green;
+    background-color: #0D0D0D;
     height: 100px;
     display: flex;
     justify-content: space-between;
     padding-left: 50px;
     padding-right: 50px;
+    color: #39FF14;
 }
