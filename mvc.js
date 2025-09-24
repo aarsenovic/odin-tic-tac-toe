@@ -158,6 +158,20 @@ function gameController() {
             view.renderGameBoard(model.getGameState());
     }
 
+    function displaPlayerNames() {
+        const playerOneNameDiv = document.querySelector(".player-one");
+        const playerTwoNameDiv = document.querySelector(".player-two");
+        playerOneNameDiv.textContent = playerOne.name;
+        playerTwoNameDiv.textContent = playerTwo.name;
+    }
+
+    function displayPlayerScores() {
+        const playerOneScoreDiv = document.querySelector(".player-one-score");
+        const playerTwoScoreDiv = document.querySelector(".player-two-score");
+        playerOneScoreDiv.textContent = playerOne.getScore();
+        playerTwoScoreDiv.textContent = playerTwo.getScore();
+    }
+
     function attachListeners() {
         const nodeListArray = view.returnNodeList();
         nodeListArray.forEach(element => {
@@ -171,6 +185,7 @@ function gameController() {
                             game.winner.increaseScore();
                             resetRound();
                             attachListeners();
+                            displayPlayerScores();
                             break
                         case "ONGOING":
                             model.changeTurn();
@@ -184,6 +199,8 @@ function gameController() {
             })
         })
     }
+    displaPlayerNames();
+    displayPlayerScores();
     attachListeners();
 }
 

@@ -1,3 +1,9 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
 .main {
     display: flex;
     justify-content: center;
@@ -17,4 +23,13 @@
     background-color: gray;
     padding: 10px;
     text-align: center;
+}
+
+.player-scores {
+    background-color: green;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 50px;
+    padding-right: 50px;
 }
