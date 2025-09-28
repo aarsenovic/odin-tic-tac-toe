@@ -137,8 +137,11 @@ function player(name, sign) {
 //controller
 function gameController() {
 
-    const playerOne = player("Zack", "X");
-    const playerTwo = player("Miri", "O");
+    const playerOneName = prompt("Enter player one name: ");
+    const playerTwoname = prompt("Enter player two name: ");
+
+    const playerOne = player(playerOneName, "X");
+    const playerTwo = player(playerTwoname, "O");
 
     const view = gameboard();
     const model = game(playerOne, playerTwo);
