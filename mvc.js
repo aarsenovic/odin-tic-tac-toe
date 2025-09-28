@@ -98,7 +98,7 @@
             while (i < possibleWinningOutcomes.length) {
                 if (boardState[possibleWinningOutcomes[i][0]] === sign && boardState[possibleWinningOutcomes[i][1]] === sign && boardState[possibleWinningOutcomes[i][2]] === sign) {
                     isgameWon = true;
-                    alert(`Winner is ${nextPlayer.name}`);
+                  
                     return { status: "WIN", winner: nextPlayer }
 
                 }
@@ -139,10 +139,10 @@
     function gameController() {
 
         const playerOneName = prompt("Enter player one name: ");
-        const playerTwoname = prompt("Enter player two name: ");
+        const playerTwoName = prompt("Enter player two name: ");
 
         const playerOne = player(playerOneName, "X");
-        const playerTwo = player(playerTwoname, "O");
+        const playerTwo = player(playerTwoName, "O");
 
         const view = gameboard();
         const model = game(playerOne, playerTwo);
@@ -179,6 +179,7 @@
 
                         switch (game.status) {
                             case "WIN":
+                                alert(`Winner is ${game.winner.name}`)
                                 game.winner.increaseScore();
                                 resetRound();
                                 attachListeners();
