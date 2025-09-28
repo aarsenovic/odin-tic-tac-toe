@@ -53,8 +53,6 @@ function game(playerOne, playerTwo) {
     }
 
     function changeTurn() {
-        // console.log("Funkcija se pokrenula")
-        // console.log(nextTurn)
         if (nextTurn === playerOne.sign) {
             nextTurn = playerTwo.sign;
             nextPlayer = playerTwo;
@@ -62,7 +60,6 @@ function game(playerOne, playerTwo) {
             nextTurn = playerOne.sign;
             nextPlayer = playerOne;
         }
-        console.log("broj poteza", turn);
         turn++;
     }
 
@@ -71,14 +68,12 @@ function game(playerOne, playerTwo) {
     }
 
     function getNextTurn() {
-        // console.log("unutar getNextTurn",nextTurn)
         return nextTurn
     }
 
     function makeAMove(index, sign) {
         if (gameState[index] === " ") {
             gameState[index] = sign
-            // console.log("Stanje niza", gameState)
             return true
         } else {
             alert("Incorrect Move")
@@ -102,8 +97,6 @@ function game(playerOne, playerTwo) {
         let isgameWon = false;
         while (i < possibleWinningOutcomes.length) {
             if (boardState[possibleWinningOutcomes[i][0]] === sign && boardState[possibleWinningOutcomes[i][1]] === sign && boardState[possibleWinningOutcomes[i][2]] === sign) {
-                console.log(`${sign} is a winner`);
-                console.log(`Game is won under condition ${i}`)
                 isgameWon = true;
                 return {status: "WIN", winner: nextPlayer}
 
