@@ -98,6 +98,7 @@ function game(playerOne, playerTwo) {
         while (i < possibleWinningOutcomes.length) {
             if (boardState[possibleWinningOutcomes[i][0]] === sign && boardState[possibleWinningOutcomes[i][1]] === sign && boardState[possibleWinningOutcomes[i][2]] === sign) {
                 isgameWon = true;
+                alert(`Winner is ${nextPlayer.name}`);
                 return {status: "WIN", winner: nextPlayer}
 
             }
