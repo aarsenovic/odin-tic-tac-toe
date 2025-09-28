@@ -1,206 +1,206 @@
-(function() {
-// view
-function gameboard() {
-    const fieldNodeArray = [];
-    function renderGameBoard(gameboard) {
+(function () {
+    // view
+    function gameboard() {
+        const fieldNodeArray = [];
+        function renderGameBoard(gameboard) {
 
-        const mainDiv = document.querySelector(".main");
-        const gameBoardDiv = document.createElement("div");
-        gameBoardDiv.classList.add("gameboard")
-        mainDiv.appendChild(gameBoardDiv)
+            const mainDiv = document.querySelector(".main");
+            const gameBoardDiv = document.createElement("div");
+            gameBoardDiv.classList.add("gameboard")
+            mainDiv.appendChild(gameBoardDiv)
 
-        let i = 0
-        gameboard.forEach(element => {
-            const field = document.createElement("div");
-            field.textContent = element;
-            field.setAttribute("data-index-number", i)
-            i++;
+            let i = 0
+            gameboard.forEach(element => {
+                const field = document.createElement("div");
+                field.textContent = element;
+                field.setAttribute("data-index-number", i)
+                i++;
 
-            gameBoardDiv.appendChild(field);
-            fieldNodeArray.push(field);
-        })
+                gameBoardDiv.appendChild(field);
+                fieldNodeArray.push(field);
+            })
 
+        }
+
+        function returnNodeList() {
+            return fieldNodeArray
+        }
+
+        function updateField(field, sign) {
+            field.textContent = sign;
+        }
+
+        function remakeGameBoard() {
+            const board = document.querySelector(".gameboard");
+            board.remove();
+        }
+
+
+        return { renderGameBoard, returnNodeList, updateField, remakeGameBoard }
     }
 
-    function returnNodeList() {
-        return fieldNodeArray
-    }
-
-    function updateField(field, sign) {
-        field.textContent = sign;
-    }
-
-    function remakeGameBoard() {
-        const board = document.querySelector(".gameboard");
-        board.remove();
-    }
+    //model
+    function game(playerOne, playerTwo) {
+        let gameState = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
 
 
-    return { renderGameBoard, returnNodeList, updateField, remakeGameBoard }
-}
+        let nextTurn = playerOne.sign;
+        let nextPlayer = playerOne;
+        let turn = 1;
 
-//model
-function game(playerOne, playerTwo) {
-    let gameState = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+        function getGameState() {
+            return gameState
+        }
 
+        function changeTurn() {
+            if (nextTurn === playerOne.sign) {
+                nextTurn = playerTwo.sign;
+                nextPlayer = playerTwo;
+            } else {
+                nextTurn = playerOne.sign;
+                nextPlayer = playerOne;
+            }
+            turn++;
+        }
 
-    let nextTurn = playerOne.sign;
-    let nextPlayer = playerOne;
-    let turn = 1;
+        function getTurnNumber() {
+            return turn
+        }
 
-    function getGameState() {
-        return gameState
-    }
+        function getNextTurn() {
+            return nextTurn
+        }
 
-    function changeTurn() {
-        if (nextTurn === playerOne.sign) {
-            nextTurn = playerTwo.sign;
-            nextPlayer = playerTwo;
-        } else {
+        function makeAMove(index, sign) {
+            if (gameState[index] === " ") {
+                gameState[index] = sign
+                return true
+            } else {
+                alert("Incorrect Move")
+                return false
+            }
+        }
+
+        function checkIsGameOver(boardState, sign, turn) {
+            const possibleWinningOutcomes = [
+                [0, 1, 2],
+                [0, 3, 6],
+                [0, 4, 8],
+                [2, 4, 6],
+                [3, 4, 5],
+                [6, 7, 8],
+                [1, 4, 7],
+                [2, 5, 8],
+            ]
+
+            let i = 0;
+            let isgameWon = false;
+            while (i < possibleWinningOutcomes.length) {
+                if (boardState[possibleWinningOutcomes[i][0]] === sign && boardState[possibleWinningOutcomes[i][1]] === sign && boardState[possibleWinningOutcomes[i][2]] === sign) {
+                    isgameWon = true;
+                    alert(`Winner is ${nextPlayer.name}`);
+                    return { status: "WIN", winner: nextPlayer }
+
+                }
+                i++;
+            }
+
+            if (turn === 9 && isgameWon === false) {
+                alert("GAME IS TIE!!!");
+                return { status: "TIE" }
+            }
+
+            else {
+                return { status: "ONGOING" }
+            }
+        }
+
+        function resetGameState() {
+            turn = 1;
+            gameState = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
             nextTurn = playerOne.sign;
             nextPlayer = playerOne;
         }
-        turn++;
+
+        return { gameState, makeAMove, changeTurn, nextTurn, getNextTurn, checkIsGameOver, getTurnNumber, resetGameState, getGameState }
     }
 
-    function getTurnNumber() {
-        return turn
+
+    function player(name, sign) {
+        let score = 0;
+        const getScore = () => score;
+        const increaseScore = () => score++;
+
+        return { name, sign, increaseScore, getScore }
     }
 
-    function getNextTurn() {
-        return nextTurn
-    }
 
-    function makeAMove(index, sign) {
-        if (gameState[index] === " ") {
-            gameState[index] = sign
-            return true
-        } else {
-            alert("Incorrect Move")
-            return false
-        }
-    }
+    //controller
+    function gameController() {
 
-    function checkIsGameOver(boardState, sign, turn) {
-        const possibleWinningOutcomes = [
-            [0, 1, 2],
-            [0, 3, 6],
-            [0, 4, 8],
-            [2, 4, 6],
-            [3, 4, 5],
-            [6, 7, 8],
-            [1, 4, 7],
-            [2, 5, 8],
-        ]
+        const playerOneName = prompt("Enter player one name: ");
+        const playerTwoname = prompt("Enter player two name: ");
 
-        let i = 0;
-        let isgameWon = false;
-        while (i < possibleWinningOutcomes.length) {
-            if (boardState[possibleWinningOutcomes[i][0]] === sign && boardState[possibleWinningOutcomes[i][1]] === sign && boardState[possibleWinningOutcomes[i][2]] === sign) {
-                isgameWon = true;
-                alert(`Winner is ${nextPlayer.name}`);
-                return {status: "WIN", winner: nextPlayer}
+        const playerOne = player(playerOneName, "X");
+        const playerTwo = player(playerTwoname, "O");
 
-            }
-            i++;
-        }
+        const view = gameboard();
+        const model = game(playerOne, playerTwo);
 
-        if (turn === 9 && isgameWon === false) {
-            alert("GAME IS TIE!!!");
-            return {status: "TIE"}
-        }
+        view.renderGameBoard(model.gameState);
 
-        else {
-            return {status: "ONGOING"}
-        }
-    }
-
-    function resetGameState() {
-        turn = 1;
-        gameState = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
-        nextTurn = playerOne.sign;
-        nextPlayer = playerOne;
-    }
-
-    return { gameState, makeAMove, changeTurn, nextTurn, getNextTurn, checkIsGameOver, getTurnNumber, resetGameState, getGameState }
-}
-
-
-function player(name, sign) {
-    let score = 0;
-    const getScore = () => score;
-    const increaseScore = () => score++;
-
-    return { name, sign, increaseScore, getScore }
-}
-
-
-//controller
-function gameController() {
-
-    const playerOneName = prompt("Enter player one name: ");
-    const playerTwoname = prompt("Enter player two name: ");
-
-    const playerOne = player(playerOneName, "X");
-    const playerTwo = player(playerTwoname, "O");
-
-    const view = gameboard();
-    const model = game(playerOne, playerTwo);
-
-    view.renderGameBoard(model.gameState);
-
-    function resetRound() {
+        function resetRound() {
             model.resetGameState();
             view.remakeGameBoard();
             view.renderGameBoard(model.getGameState());
-    }
+        }
 
-    function displaPlayerNames() {
-        const playerOneNameDiv = document.querySelector(".player-one");
-        const playerTwoNameDiv = document.querySelector(".player-two");
-        playerOneNameDiv.textContent = playerOne.name;
-        playerTwoNameDiv.textContent = playerTwo.name;
-    }
+        function displaPlayerNames() {
+            const playerOneNameDiv = document.querySelector(".player-one");
+            const playerTwoNameDiv = document.querySelector(".player-two");
+            playerOneNameDiv.textContent = playerOne.name;
+            playerTwoNameDiv.textContent = playerTwo.name;
+        }
 
-    function displayPlayerScores() {
-        const playerOneScoreDiv = document.querySelector(".player-one-score");
-        const playerTwoScoreDiv = document.querySelector(".player-two-score");
-        playerOneScoreDiv.textContent = playerOne.getScore();
-        playerTwoScoreDiv.textContent = playerTwo.getScore();
-    }
+        function displayPlayerScores() {
+            const playerOneScoreDiv = document.querySelector(".player-one-score");
+            const playerTwoScoreDiv = document.querySelector(".player-two-score");
+            playerOneScoreDiv.textContent = playerOne.getScore();
+            playerTwoScoreDiv.textContent = playerTwo.getScore();
+        }
 
-    function attachListeners() {
-        const nodeListArray = view.returnNodeList();
-        nodeListArray.forEach(element => {
-            element.addEventListener("click", () => {
-                if (model.makeAMove(element.dataset.indexNumber, model.getNextTurn())) {
-                    view.updateField(element, model.getNextTurn())
-                    let game = model.checkIsGameOver(model.getGameState(), model.getNextTurn(), model.getTurnNumber());
+        function attachListeners() {
+            const nodeListArray = view.returnNodeList();
+            nodeListArray.forEach(element => {
+                element.addEventListener("click", () => {
+                    if (model.makeAMove(element.dataset.indexNumber, model.getNextTurn())) {
+                        view.updateField(element, model.getNextTurn())
+                        let game = model.checkIsGameOver(model.getGameState(), model.getNextTurn(), model.getTurnNumber());
 
-                    switch(game.status) {
-                        case "WIN":
-                            game.winner.increaseScore();
-                            resetRound();
-                            attachListeners();
-                            displayPlayerScores();
-                            break
-                        case "ONGOING":
-                            model.changeTurn();
-                            break
-                        case "TIE":
-                            resetRound();
-                            attachListeners();
-                            break
+                        switch (game.status) {
+                            case "WIN":
+                                game.winner.increaseScore();
+                                resetRound();
+                                attachListeners();
+                                displayPlayerScores();
+                                break
+                            case "ONGOING":
+                                model.changeTurn();
+                                break
+                            case "TIE":
+                                resetRound();
+                                attachListeners();
+                                break
+                        }
                     }
-                }
+                })
             })
-        })
+        }
+        displaPlayerNames();
+        displayPlayerScores();
+        attachListeners();
     }
-    displaPlayerNames();
-    displayPlayerScores();
-    attachListeners();
-}
 
 
-gameController();
+    gameController();
 })();
